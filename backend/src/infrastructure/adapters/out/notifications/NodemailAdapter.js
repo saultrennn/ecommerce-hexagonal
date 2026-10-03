@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { NotificationService } from '../../../../application/ports/out/NotificationService.js';
+import { EmailServicePort } from '../../../../application/ports/out/EmailServicePort.js';
 
 const money = (n) =>
   new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(Number(n));
@@ -37,7 +37,7 @@ const tableHtml = (order) => `
     </tr>
   </table>`;
 
-export class NodemailerNotificationService extends NotificationService {
+export class NodemailAdapter extends EmailServicePort {
   constructor({ smtp, from, adminEmail, payment }) {
     super();
     this.from = from;

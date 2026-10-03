@@ -4,7 +4,7 @@ import { PostgresProductRepository } from '../adapters/out/persistence/PostgresP
 import { PostgresOrderRepository } from '../adapters/out/persistence/PostgresOrderRepository.js';
 import { BcryptPasswordHasher } from '../adapters/out/security/BcryptPasswordHasher.js';
 import { JwtTokenService } from '../adapters/out/security/JwtTokenService.js';
-import { NodemailerNotificationService } from '../adapters/out/notifications/NodemailerNotificationService.js';
+import { NodemailAdapter } from '../adapters/out/notifications/NodemailAdapter.js';
 import { config } from './env.js';
 
 import { RegisterUser, Login, ListUsers, GetUser, UpdateUser, DeleteUser } from '../../application/use-cases/users.js';
@@ -15,7 +15,7 @@ const userRepository = new PostgresUserRepository();
 const productRepository = new PostgresProductRepository();
 const orderRepository = new PostgresOrderRepository();
 const passwordHasher = new BcryptPasswordHasher();
-const notificationService = new NodemailerNotificationService(config.mail);
+const notificationService = new NodemailAdapter(config.mail);
 export const tokenService = new JwtTokenService();
 
 export const useCases = {
