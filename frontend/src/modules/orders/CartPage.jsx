@@ -9,22 +9,45 @@ export default function CartPage() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [created, setCreated] = useState(null);
 
   const placeOrder = async () => {
     setError('');
     setLoading(true);
     try {
-      await orderService.create(
+      const order = await orderService.create(
         cart.items.map((i) => ({ productId: i.product.id, quantity: i.quantity }))
       );
       cart.clear();
-      navigate('/orders');
+      setCreated(order || {});
     } catch (err) {
       setError(err.message); // p. ej. "Stock insuficiente para ..."
     } finally {
       setLoading(false);
     }
   };
+
+  if (created) {
+    return (
+      <section>
+        <h2>Pedido registrado</h2>
+        <div className="card">
+          <p>
+            {created.id ? `Tu pedido #${created.id}` : 'Tu pedido'} quedó en estado{' '}
+            <strong>Pendiente de pago</strong>.
+          </p>
+          <p>
+            Te enviamos un correo con el desglose de tu compra y los datos para realizar la
+            transferencia. Si no lo ves, revisa la carpeta de spam.
+          </p>
+          <div className="actions">
+            <button className="btn" onClick={() => navigate('/orders')}>Ver mis pedidos</button>
+            <Link to="/" className="btn btn-secondary">Seguir comprando</Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   if (cart.items.length === 0) {
     return (
@@ -66,6 +89,10 @@ export default function CartPage() {
         </table>
       </div>
       <p className="muted">El servidor valida el stock y calcula el total definitivo al crear el pedido.</p>
+      <p className="muted">
+        Al realizar el pedido quedará en estado Pendiente de pago. Te enviaremos por correo el
+        desglose y las instrucciones para transferir.
+      </p>
       <div className="actions">
         <button className="btn" onClick={placeOrder} disabled={loading}>
           {loading ? 'Procesando...' : 'Realizar pedido'}
