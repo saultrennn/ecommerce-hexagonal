@@ -15,6 +15,22 @@ export const config = {
     expiresIn: process.env.JWT_EXPIRES_IN || '2h',
   },
   bcryptRounds: Number(process.env.BCRYPT_ROUNDS || 10),
+  mail: {
+    smtp: {
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: Number(process.env.SMTP_PORT || 587),
+      user: process.env.SMTP_USER || '',
+      pass: process.env.SMTP_PASS || '',
+    },
+    from: process.env.MAIL_FROM || process.env.SMTP_USER || '',
+    adminEmail: process.env.ADMIN_EMAIL || '',
+    payment: {
+      bank: process.env.PAYMENT_BANK || '',
+      accountHolder: process.env.PAYMENT_ACCOUNT_HOLDER || '',
+      clabe: process.env.PAYMENT_CLABE || '',
+      instructions: process.env.PAYMENT_INSTRUCTIONS || '',
+    },
+  },
 };
 
 if (!config.jwt.secret || config.jwt.secret.length < 16) {

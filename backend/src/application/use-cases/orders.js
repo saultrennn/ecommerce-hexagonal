@@ -10,16 +10,40 @@ function assertOwnerOrManager(requester, order) {
 }
 
 export class CreateOrder {
-  constructor({ orderRepository, productRepository }) {
+  constructor({ orderRepository, productRepository, userRepository, notificationService }) {
     this.orderRepository = orderRepository;
     this.productRepository = productRepository;
+    this.userRepository = userRepository;
+    this.notificationService = notificationService;
   }
+
+  // El pedido ya está guardado: un fallo al notificar no debe revertirlo ni romper la respuesta.
+  async notify(order, requesterId) {
+    try {
+      const customer = await this.userRepository.findById(requesterId);
+      if (!customer) return;
+      const results = await Promise.allSettled([
+        this.notificationService.sendOrderReceipt(order, customer),
+        this.notificationService.notifyAdminNewOrder(order, customer),
+      ]);
+      results.forEach((r) => {
+        if (r.status === 'rejected') {
+          console.error(`[notificaciones] pedido #${order.id}:`, r.reason?.message || r.reason);
+        }
+      });
+    } catch (err) {
+      console.error(`[notificaciones] pedido #${order.id}:`, err.message);
+    }
+  }
+
   async execute({ requester, items }) {
     const ids = [...new Set((items || []).map((i) => Number(i.productId)).filter(Number.isInteger))];
     const found = await this.productRepository.findByIds(ids);
     const products = new Map(found.map((p) => [p.id, p]));
     const order = Order.create({ userId: requester.id, lines: items, products });
-    return this.orderRepository.create(order);
+    const created = await this.orderRepository.create(order);
+    this.notify(created, requester.id); // sin await: no retrasa la respuesta
+    return created;
   }
 }
 
