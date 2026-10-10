@@ -48,3 +48,15 @@ th, td { text-align: left; padding: .6rem .5rem; border-bottom: 1px solid var(--
 .badge-paid { background: #dbeafe; color: #1e40af; }
 .badge-shipped { background: #d1fae5; color: #065f46; }
 .badge-cancelled { background: #fee2e2; color: #991b1b; }
+
+/* Dashboard de analítica */
+select { padding: .55rem .7rem; border: 1px solid var(--border); border-radius: 8px; font: inherit; background: #fff; }
+select:focus { outline: 2px solid #bfdbfe; border-color: var(--primary); }
+.filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; margin-bottom: 1rem; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.kpi-grid .card p { margin: 0; }
+.kpi { font-size: 1.5rem; font-weight: 700; margin-top: .3rem !important; }
+.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.charts-grid h3, .card h3 { margin: 0 0 .75rem; }
+.status-list { list-style: none; padding: 0; margin: .5rem 0 0; display: flex; flex-direction: column; gap: .4rem; }
+.status-list li { display: flex; justify-content: space-between; align-items: center; }

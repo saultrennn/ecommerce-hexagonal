@@ -21,6 +21,7 @@ export default function Navbar() {
         <NavLink to="/" end>Catálogo</NavLink>
         {isAdmin && <NavLink to="/cart">Carrito ({count})</NavLink>}
         {canManageOrders && <NavLink to="/orders">Pedidos</NavLink>}
+        {isAdmin && <NavLink to="/analytics">Analítica</NavLink>}
         {canManageProducts && <NavLink to="/products/new">Nuevo producto</NavLink>}
       </nav>
       <div className="session">

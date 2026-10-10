@@ -5,6 +5,7 @@ import * as auth from '../controllers/authController.js';
 import * as users from '../controllers/userController.js';
 import * as products from '../controllers/productController.js';
 import * as orders from '../controllers/orderController.js';
+import * as analytics from '../controllers/analyticsController.js';
 
 const router = Router();
 const admin = requireRole('admin');
@@ -34,5 +35,8 @@ router.get('/orders', authenticate, orderAccess, h(orders.list));
 router.get('/orders/:id', authenticate, orderAccess, h(orders.getById));
 router.put('/orders/:id/status', authenticate, orderAccess, h(orders.updateStatus));
 router.delete('/orders/:id', authenticate, orderAccess, h(orders.cancel));
+
+// Analítica: dashboard solo para admin
+router.get('/analytics/dashboard', authenticate, admin, h(analytics.dashboard));
 
 export default router;
